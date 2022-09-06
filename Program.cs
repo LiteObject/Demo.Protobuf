@@ -17,16 +17,20 @@ namespace Demo.ProtoBuf
             };
 
             // To serialize directly into a memory stream:
-            var byteArray  = Serialize<User>(user);
+            var byteArray = Serialize<User>(user);
 
-            if(byteArray is not null)
+            if (byteArray is not null)
             {
-                Console.WriteLine(Encoding.Default.GetString(byteArray));            
+                Console.WriteLine(Encoding.Default.GetString(byteArray));
             }
 
             // To serialize directly to a file:
-            var filePath = Path.Join("./SerializedOutput", Path.GetRandomFileName() + ".buf"); 
+            var filePath = Path.Join("./SerializedOutput", Path.GetRandomFileName() + ".buf");
             Serialize(user, filePath);
+
+            // To deserialize from a ".buf" file
+            var dsUser = Deserialize<User>(filePath);
+            Console.WriteLine(dsUser.Id + ", " + dsUser.Username + ", " + dsUser.FirstName + ", " + dsUser.LastName + ", " + dsUser.Email);
         }
 
         private static byte[]? Serialize<T>(T obj)
@@ -45,6 +49,15 @@ namespace Demo.ProtoBuf
             using (var fileStream = File.Create(filePath))
             {
                 Serializer.Serialize(fileStream, obj);
+            }
+        }
+
+        private static T Deserialize<T>(string filePath)
+        {
+            using (var fileStream = File.OpenRead(filePath))
+            {
+                var obj = Serializer.Deserialize<T>(fileStream);
+                return obj;
             }
         }
     }
