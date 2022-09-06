@@ -1,6 +1,26 @@
 # Demo of Protobuf with C#
 Protocol buffers are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
 
+## What is a "Length Prefix"?
+If we want multiple objects at once, and they are all encoded as bytes in the same stream, then we need to know when one object ends, and another begins. 
+
+```csharp
+
+// To serialize
+Serializer.SerializeWithLengthPrefix(fileStream, obj1, PrefixStyle.Fixed32);
+Serializer.SerializeWithLengthPrefix(fileStream, obj2, PrefixStyle.Fixed32);
+
+// OPTIONS #1: To deserialize
+do
+{
+    user = Serializer.DeserializeWithLengthPrefix<User>(fileStream, PrefixStyle.Fixed32);
+} while (user != null);
+
+// OPTIONS #2: To deserialize
+var users = Serializer.DeserializeItems<User>(fileStream, PrefixStyle.Fixed32, -1)
+
+```
+
 ---
 ## Links:
 - [Google Protocol Buffers](https://developers.google.com/protocol-buffers)
