@@ -1,6 +1,14 @@
 # Demo of Protobuf with C#
 Protocol buffers are Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
 
+## The **protobuf-net** nuget package that makes it all easy:
+
+```xml
+<ItemGroup>
+    <PackageReference Include="protobuf-net" Version="3.1.17" />
+</ItemGroup>
+```
+
 ## What is a "Length Prefix"?
 If we want multiple objects at once, and they are all encoded as bytes in the same stream, then we need to know when one object ends, and another begins. 
 
